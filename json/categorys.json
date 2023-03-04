@@ -1,0 +1,10 @@
+[
+  { "index": 0, "name": "svelte", "color": "#f73c00" },
+  { "index": 1, "name": "angular", "color": "#dd0031" },
+  { "index": 2, "name": "react", "color": "#5dd3f3" },
+  { "index": 3, "name": "vue", "color": "#68ad81" },
+  { "index": 4, "name": "javascript", "color": "#f7df1e" },
+  { "index": 5, "name": "typescript", "color": "#3178c6" },
+  { "index": 6, "name": "css", "color": "#006bc0" },
+  { "index": 7, "name": "scss", "color": "#cf649a" }
+]

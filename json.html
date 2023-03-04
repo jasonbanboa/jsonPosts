@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>    
+    <dialog id="post-modal">
+        <div class="modal-contents">
+            <div class="img"></div>
+            <div class="title"><strong>${post.title}</strong></div>
+        
+            <div class="post-modal-content">
+                <div class="content">${post.contents}</div>
+                <div class="categories">${categories}</div>
+            </div>
+            
+
+            <div class="footer">
+                <div class="name">${member.name}</div>
+                <div class="date">${post.date}</</div>
+            </div>
+        </div> 
+    </dialog>
+
+    <dialog id="seach-modal">
+        <div id="search-modal-main" class="modal-contents">
+            <form method="dialog" id="search-form">
+                <div>
+                    <h2 style="text-align: center; font-weight: 100">Search</h2>
+                </div>
+                <div id="search-by-name">
+                    <label for="search-modal-name">유저 이름</label>
+                    <input id="search-modal-name" class="search-name search-modal-input" type="text" placeholder="유저 이름을 입력해주세요 (ex: 김연규)">
+                </div>
+                <div id="search-by-category">
+                    <div>
+                        <i class="hash">&#35;</i>
+                        <label for="search-modal-category">카테고리</label>
+                        <input id="search-modal-category" class="search-category search-modal-input" type="text">
+                    </div>
+                    <div id="category-list-output">
+                    
+                    </div>
+                </div>
+                <div class="search-modal-buttons">
+                    <div>
+                        <button class="search-modal-button" id="search-modal-history-button" type="button">History</button>
+                    </div>
+                    <div>
+                        <button class="search-modal-button" id="search-modal-cancel">Cancel</button>
+                    </div>
+                    <div>
+                        <input class="search-modal-button" id="search-modal-search" type="submit" value="Search">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="search-modal-history" class="modal-contents">
+            <h2 style="text-align: center; font-weight: 100">History</h2>
+            <table>
+                <tbody id="history-data">
+                     <tr>
+                        <th>시간</th>
+                        <th>유저 이름</th>
+                        <th>가테고리</th>
+                    </tr>                
+                </tbody>
+            </table>
+        </div>
+    </dialog>
+
+    <header><h1>SDHS WEBSKILLS BLOG</h1></header>
+
+    <main id="main-container" class="container">
+    
+    </main>
+
+    <section id="filtered-container" class="container">
+
+    </section>
+    <script type="text/javascript" src="./index.js"></script>
+</body>
+</html>
