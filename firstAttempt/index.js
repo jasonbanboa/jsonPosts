@@ -257,9 +257,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // utility functions: fetch json
 const toJson = res => res.json();
-const getPosts = () => fetch('json/posts.json').then(toJson);
-const getMembers = () => fetch('json/members.json').then(toJson);
-const getCategories = () => fetch('json/categorys.json').then(toJson);
+const getPosts = () => fetch('../json/posts.json').then(toJson);
+const getMembers = () => fetch('../json/members.json').then(toJson);
+const getCategories = () => fetch('../json/categorys.json').then(toJson);
 
 // utiliity for disabling and enabling scroll
 function preventScroll(e) { e.preventDefault(); e.stopPropagation(); return false; }

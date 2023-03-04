@@ -1,0 +1,23 @@
+* { box-sizing: border-box; margin: 0; padding: 0; color: inherit; font-family: system-ui; }
+
+:root {
+  --text-primary: #212121; 
+  --text-secondary: #313131;
+  --text-sub: #616161;
+}
+
+#wrapper { position: relative; padding: 5rem 4rem 1rem; background: #f9f9f9; }
+header { position: fixed; top: 0; left: 0; right: 0; color: #eee; background-color: rgba(0,0,0,0.8); padding: 0.5rem 4rem }
+
+#app {  min-height: 100vh; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); grid-auto-rows: 1fr; gap: 1.5rem; }
+#app > .post { min-height: 250px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.2); }
+#app > .post > .image { height: 50%; background-color: #f1f1f1; }
+#app > .post > .title { height: 10%; padding: 0 10px; color: var(--text-primary); font-weight: 500; }
+#app > .post > .content { height: 30%; align-items: center; padding: 0 10px; color: var(--text-secondary); font-size: 14.5px; }
+#app > .post > .post-details { height: 10%; display: flex; font-size: 13px; justify-content: space-between; padding: 0 10px; color: var(--text-sub); }
+
+
+@media screen and (max-width: 375px) {
+  header { padding: 0.5rem 2rem }
+  #wrapper { padding: 4rem 2rem 1rem }
+}
