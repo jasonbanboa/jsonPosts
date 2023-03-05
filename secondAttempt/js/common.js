@@ -1,6 +1,7 @@
 
 const $app = document.querySelector('#app');
 const $detailDialog = document.querySelector('#post-detail-dialog');
+const $filterDialog = document.querySelector('#filter-dialog');
 
 const fetchJSON = path => fetch(path).then(res => res.json());
 const POSTS = await fetchJSON('../../json/posts.json');
@@ -19,21 +20,10 @@ function disableScroll() { document.body.addEventListener('wheel', preventScroll
 function enableScroll() { document.body.removeEventListener('wheel', preventScroll, { passive: false }); }
 
 // main
-const scrollStates = { 
-  // add upadting totalresultcount function
-  postStartIndex: 0,
-  postEndIndex: 30,
-  totalResultCount: POSTS.length,
-  updateScrollState: function() {
-    this.postStartIndex = this.postEndIndex;
-    this.postEndIndex += 30;
-  }
-};
-
 const modalStateObj = { 
   open: false,
 };
-const handler = {
+const modalStatehandler = {
   set(target, key, value) {
     enableScroll();
     if (key === 'open' && value) {
@@ -44,16 +34,26 @@ const handler = {
   }
 };
 
-const modalState = new Proxy(modalStateObj, handler);
+const modalState = new Proxy(modalStateObj, modalStatehandler);
+const scrollStates = { 
+  // add upadting totalresultcount function
+  postStartIndex: 0,
+  postEndIndex: 30,
+  totalResultCount: POSTS.length,
+  updateScrollState: function() {
+    this.postStartIndex = this.postEndIndex;
+    this.postEndIndex += 30;
+  }
+};
+const keyPressStates = {};
+
 
 POSTS.sort((a, b) => new Date(b.date) - new Date(a.date));
 POSTS.slice(0, 30).forEach(renderPosts);
 
 window.onscroll = () => {
   const fullPageHeight = document.body.clientHeight;
-  const clientView = window.innerHeight;
-  const scrollDistance = window.scrollY;
-  if (scrollDistance + clientView >= fullPageHeight - 200) {
+  if (window.scrollY + window.innerHeight >= fullPageHeight - 200) {
     const { postStartIndex, postEndIndex, totalResultCount } = scrollStates;
     if (postEndIndex >= totalResultCount) return;
     scrollStates.updateScrollState();
@@ -66,7 +66,26 @@ $detailDialog.addEventListener('click', (e) => {
     $detailDialog.close(); 
     modalState.open = false;
   }
-})
+});
+
+window.addEventListener('keyup', (e) => delete keyPressStates[e.key]);
+
+window.addEventListener('keydown', (e) => { 
+  if (modalState.open) return;
+  keyPressStates[e.key] = true;
+  if (keyPressStates.Shift && keyPressStates.Control) {
+    modalState.open = true;
+    $filterDialog.showModal();
+  }
+});
+
+$filterDialog.addEventListener('click', (e) => {
+  if (e.target === $filterDialog) {
+    $filterDialog.close(); 
+    modalState.open = false;
+  }
+});
+
 
 function renderPosts({ title, contents, date, memberIndex, categorys }) {
   const { name } = getUser(Number(memberIndex));

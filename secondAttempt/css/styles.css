@@ -60,22 +60,29 @@ header { position: fixed; top: 0; left: 0; right: 0; color: #eee; background-col
   color: var(--text-sub); 
   border-top: 1px solid rgba(0,0,0,0.2);
 }
-#post-detail-dialog  {
-  height: 350px;
-  width: 600px;
+dialog {
   border: none;
-  left: 50%;
-  top: 35%;
-  transform: translate(-50%, -50%);
   border-radius: 8px;
+  left: 50%;
 }
-
-#post-detail-dialog > div {
+dialog > div {
   height: 100%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 5px;
+}
+
+#filter-dialog {
+  top: 30%;
+  transform: translate(-50%, -50%);
+}
+
+#post-detail-dialog  {
+  height: 350px;
+  width: 600px;
+  top: 35%;
+  transform: translate(-50%, -50%);
 }
 
 #post-detail-dialog .content {
