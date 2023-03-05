@@ -13,8 +13,12 @@ const getUser = (memberIndex) => MEMBERS.find(({ index }) => memberIndex === ind
 const getPost = (postId) => POSTS.find(({ index }) => index === postId);
 const getCategories = (categoryIndexArray) => CATEGORIES.filter(({ index }) => categoryIndexArray.includes(index));
 const makeCategoryInnerHTML = (categoriesArray) => categoriesArray.reduce((innerHTML, { name, color }) => innerHTML += `<span style="background-color: ${color}" class="category">${name}</span>`, '');
-// main
 
+function preventScroll(e) { e.preventDefault(); e.stopPropagation(); return false; }
+function disableScroll() { document.body.addEventListener('wheel', preventScroll, { passive: false }); }
+function enableScroll() { document.body.removeEventListener('wheel', preventScroll, { passive: false }); }
+
+// main
 const scrollStates = { 
   // add upadting totalresultcount function
   postStartIndex: 0,
@@ -25,6 +29,22 @@ const scrollStates = {
     this.postEndIndex += 30;
   }
 };
+
+const modalStateObj = { 
+  open: false,
+};
+const handler = {
+  set(target, key, value) {
+    enableScroll();
+    if (key === 'open' && value) {
+      disableScroll();
+    }
+    target[key] = value;
+    return true;
+  }
+};
+
+const modalState = new Proxy(modalStateObj, handler);
 
 POSTS.sort((a, b) => new Date(b.date) - new Date(a.date));
 POSTS.slice(0, 30).forEach(renderPosts);
@@ -42,7 +62,10 @@ window.onscroll = () => {
 }
 
 $detailDialog.addEventListener('click', (e) => {
-  if (e.target === $detailDialog) $detailDialog.close();
+  if (e.target === $detailDialog) { 
+    $detailDialog.close(); 
+    modalState.open = false;
+  }
 })
 
 function renderPosts({ title, contents, date, memberIndex, categorys }) {
@@ -61,6 +84,7 @@ function renderPosts({ title, contents, date, memberIndex, categorys }) {
   `;    
 
   $post.addEventListener('click', () => {
+    modalState.open = true;
     showPostDetailModal(title, contents, date, name, categorys);
   });
   $app.appendChild($post);
@@ -84,4 +108,7 @@ function showPostDetailModal(title, contents, date, username, categorys) {
     </div>
   `;
 }
+
+
+
 
