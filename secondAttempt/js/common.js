@@ -13,10 +13,7 @@ const CATEGORIES = await fetchJSON('../../json/categorys.json');
 const MEMBERS = await fetchJSON('../../json/members.json');
 
 // global states
-const modalStateObj = { 
-  open: false,
-};
-const modalStatehandler = {
+const modalState = new Proxy({ open: false }, {
   set(target, key, value) {
     enableScroll();
     if (key === 'open' && value) {
@@ -25,9 +22,8 @@ const modalStatehandler = {
     target[key] = value;
     return true;
   }
-};
+});
 
-const modalState = new Proxy(modalStateObj, modalStatehandler);
 const scrollStates = { 
   // add upadting totalresultcount function
   postStartIndex: 0,
@@ -48,15 +44,12 @@ const filterStates = {
   }
 }
 
-// util  functions
+// util functions
 const getUser = (memberIndex) => MEMBERS.find(({ index }) => memberIndex === index);
-const getPost = (postId) => POSTS.find(({ index }) => index === postId);
 const getCategories = (categoryIndexArray) => CATEGORIES.filter(({ index }) => categoryIndexArray.includes(index));
 const makeCategoryInnerHTML = (categoriesArray) => categoriesArray.reduce((innerHTML, { name, color }) => innerHTML += `<span style="background-color: ${color}" class="category">${name}</span>`, '');
-const getUserByUsername = (username) => MEMBERS.find(({ name }) => name === username);
-const getCategoryByName = (categoryName) => CATEGORIES.find(({ name }) => name === categoryName); // currently not using
 const categoryNameTocategoryId = (categoryName) => CATEGORIES.find(({ name }) => name === categoryName).index;
-const isValidCategory = (category) => !filterStates.categories.includes(CATEGORIES.find(({ name }) => name === category).index); 
+const isValidCategory = (category) => !filterStates.categories.includes(categoryNameTocategoryId(category));
 
 function preventScroll(e) { e.preventDefault(); e.stopPropagation(); return false; }
 function disableScroll() { document.body.addEventListener('wheel', preventScroll, { passive: false }); }
@@ -102,7 +95,6 @@ $filterDialog.addEventListener('click', (e) => {
   }
 });
 
-// filter name only first
 $filterButton.addEventListener('click', () => {
   const username = $filterByUsernameInput.value;
   filterStates.username = username;
@@ -110,7 +102,7 @@ $filterButton.addEventListener('click', () => {
   console.log(filterStates);
   const filteredPosts = filterSearch(POSTS, filterStates);
   console.log(filteredPosts);
-  
+
   filterStates.reset();
   modalState.open = false;
   $filterDialog.close();
@@ -127,14 +119,10 @@ $filterByCategoriesInput.addEventListener('keydown', (e) => {
   }
 })
 
-// CURRENTLY ONLY FILTERS BY CATEGORIES
+// CURRENTLY ONLY FILTERS BY CATEGORIES ADD FILTER BY USERNAME
 function filterSearch(posts, { username, categories }) {
-
   const data = posts.filter(({ categorys }) => categories.every(categoryID => categorys.includes(categoryID)));
   return data;
-  // const { index: userID } = getUserByUsername(username);
-  // const data = posts.filter(({ memberIndex }) => memberIndex == userID);
-  // console.log(data);
 }
 
 function renderPosts({ title, contents, date, memberIndex, categorys }) {
