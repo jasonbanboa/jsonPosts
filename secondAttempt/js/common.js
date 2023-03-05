@@ -10,17 +10,40 @@ const MEMBERS = await fetchJSON('../../json/members.json');
 console.log({ POSTS, CATEGORIES, MEMBERS });
 
 // util  functions
-const getUser = memberIndex => MEMBERS.filter(({ index }) => memberIndex === index)[0];
+const getUser = memberIndex => MEMBERS.find(({ index }) => memberIndex === index);
 
 // main
-POSTS.sort((a, b) => new Date(b.date) - new Date(a.date));
-POSTS.forEach(post => renderPosts(post));
 
+const scrollStates = { 
+  // add upadting totalresultcount function
+  postStartIndex: 0,
+  postEndIndex: 30,
+  totalResultCount: POSTS.length,
+  updateScrollState: function() {
+    this.postStartIndex = this.postEndIndex;
+    this.postEndIndex += 30;
+  }
+};
+
+POSTS.sort((a, b) => new Date(b.date) - new Date(a.date));
+POSTS.slice(0, 30).forEach(renderPosts);
+
+window.onscroll = () => {
+  const fullPageHeight = document.body.clientHeight;
+  const clientView = window.innerHeight;
+  const scrollDistance = window.scrollY;
+  if (scrollDistance + clientView >= fullPageHeight - 200) {
+    const { postStartIndex, postEndIndex, totalResultCount } = scrollStates;
+    if (postEndIndex >= totalResultCount) return;
+    scrollStates.updateScrollState();
+    POSTS.slice(postStartIndex, postEndIndex).forEach(renderPosts);
+  }
+}
 
 function renderPosts({ title, contents, date, memberIndex }) {
   const { name } = getUser(Number(memberIndex));
-  console.log(name);
   const $post = document.createElement('article');
+
   $post.className = 'post';
   $post.innerHTML = `
     <div class="image"></div>
