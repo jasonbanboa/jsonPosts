@@ -20,9 +20,11 @@ header { position: fixed; top: 0; left: 0; right: 0; color: #eee; background-col
   border: 1px solid rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
-#app > .post > .image { 
+.image { 
+  border-radius: 8px 8px 0 0;
   height: 45%; 
   background-color: #f1f1f1;
 }
@@ -47,7 +49,7 @@ header { position: fixed; top: 0; left: 0; right: 0; color: #eee; background-col
   -webkit-box-orient: vertical;
 }
 
-#app > .post > .post-details { 
+.post-details { 
   margin-top: auto;
   height: 15%;
   display: flex;
@@ -58,6 +60,50 @@ header { position: fixed; top: 0; left: 0; right: 0; color: #eee; background-col
   color: var(--text-sub); 
   border-top: 1px solid rgba(0,0,0,0.2);
 }
+#post-detail-dialog  {
+  height: 350px;
+  width: 600px;
+  border: none;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+}
+
+#post-detail-dialog > div {
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#post-detail-dialog .content {
+  padding: 0;
+}
+
+#post-detail-dialog .categories {
+  height: 10%;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+#post-detail-dialog .categories > span {
+  color: whitesmoke;
+  border-radius: 25px;
+  height: 25px;
+  font-size: 12px;
+  padding: 0 10px;
+  line-height: 25px;
+}
+
+#post-detail-dialog .post-details {
+  padding: 0;
+  padding-top: 6px;
+  height: 10%;
+}
+
 
 @media screen and (max-width: 375px) {
   header { padding: 0.5rem 2rem }
