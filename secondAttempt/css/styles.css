@@ -60,11 +60,14 @@ header { position: fixed; top: 0; left: 0; right: 0; color: #eee; background-col
   color: var(--text-sub); 
   border-top: 1px solid rgba(0,0,0,0.2);
 }
+
 dialog {
   border: none;
   border-radius: 8px;
   left: 50%;
+  width:600px;
 }
+
 dialog > div {
   height: 100%;
   padding: 1rem;
@@ -78,9 +81,33 @@ dialog > div {
   transform: translate(-50%, -50%);
 }
 
+#filter-dialog .category-output {
+  border: 1px solid black;
+  height: 32px;
+}
+
+#filter-dialog .controls {
+  display: flex;
+  justify-content: right;
+  gap: 1rem
+}
+
+#filter-dialog button {
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: transparent;
+  border-radius: 5px;
+}
+/* #filter-dialog #filter {
+  
+}
+
+#filter-dialog #cancel {
+  
+} */
+
 #post-detail-dialog  {
   height: 350px;
-  width: 600px;
   top: 35%;
   transform: translate(-50%, -50%);
 }
