@@ -97,19 +97,6 @@ $filterDialog.addEventListener('click', (e) => {
   }
 });
 
-$filterButton.addEventListener('click', () => {
-  const username = $filterByUsernameInput.value;
-  filterStates.username = username;
-
-  console.log(filterStates);
-  const filteredPosts = filterSearch(POSTS, filterStates);
-  console.log(filteredPosts);
-
-  filterStates.reset();
-  modalState.open = false;
-  $filterDialog.close();
-});
-
 $filterByCategoriesInput.addEventListener('keydown', (e) => {
   const { categories } = filterStates;
   const { value } = $filterByCategoriesInput;
@@ -119,30 +106,30 @@ $filterByCategoriesInput.addEventListener('keydown', (e) => {
     $filterByCategoriesInput.value = '';
     console.log(filterStates);
   }
-})
+});
 
-// DOES NOT WORK
+$filterButton.addEventListener('click', () => {
+  const username = $filterByUsernameInput.value;
+  filterStates.username = username;
+
+  console.log(filterStates);
+  const filteredPosts = filterSearch(POSTS, filterStates);
+  // after getting the filtered data update 
+  console.log(filteredPosts);
+
+  filterStates.reset();
+  modalState.open = false;
+  $filterDialog.close();
+});
+
 function filterSearch(posts, { username, categories }) {
-
   const filteredByUsername = filterByUsername(posts, username);
-  if (!filterByUsername) return false;
-  if (filterByUsername && !categories) {
-    return filterByUsername;
-  }
-  // only category was provided
   const fileredByCategories = filterByCategories(posts, categories);
-  if (!filterByUsername && categories) return fileredByCategories;
-   // if both are porived
-  return filterByCategories(filteredByUsername, categories);
-    // // filter by username
-  // const userData  = MEMBERS.find(({ name }) => name === username); // gets user index
-  // if (!userData) return false;
-  // const filterByUser = POSTS.filter(({ memberIndex }) => memberIndex === userData.index);
-  // console.log(filterByUser);
 
-  // // filter by category
-  // const data = posts.filter(({ categorys }) => categories.every(categoryID => categorys.includes(categoryID)));
-  // console.log(data);
+  if (categories && !filteredByUsername) return fileredByCategories;
+  if (!filteredByUsername) return false;
+  if (filteredByUsername && !categories) return filteredByUsername;
+  return filterByCategories(filteredByUsername, categories);
 }
 
 function filterByUsername(arr, username) {
@@ -151,7 +138,6 @@ function filterByUsername(arr, username) {
   return arr.filter(({ memberIndex }) => memberIndex === userData.index);
 }
 function filterByCategories(arr, categories) {
-  console.log(arr);
   return arr.filter(({ categorys }) => categories.every(categoryID => categorys.includes(categoryID)));
 }
 
