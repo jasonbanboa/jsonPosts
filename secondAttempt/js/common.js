@@ -51,6 +51,24 @@ const makeCategoryInnerHTML = (categoriesArray) => categoriesArray.reduce((inner
 const categoryNameTocategoryId = (categoryName) => CATEGORIES.find(({ name }) => name === categoryName).index;
 const isValidCategory = (category) => !filterStates.categories.includes(categoryNameTocategoryId(category));
 
+const filterByCategories = (arr, categories) => arr.filter(({ categorys }) => categories.every(categoryID => categorys.includes(categoryID)));
+const filterByUsername = (arr, username) => {
+  const userData = MEMBERS.find(({ name }) => name === username);
+  if (!userData) return false;
+  return arr.filter(({ memberIndex }) => memberIndex === userData.index);
+}
+
+function filterSearch(posts, { username, categories }) {
+  const filteredByUsername = filterByUsername(posts, username);
+  const fileredByCategories = filterByCategories(posts, categories);
+
+  if (categories && !filteredByUsername) return fileredByCategories;
+  if (!filteredByUsername) return false;
+  if (filteredByUsername && !categories) return filteredByUsername;
+  return filterByCategories(filteredByUsername, categories);
+}
+
+
 function preventScroll(e) { e.preventDefault(); e.stopPropagation(); return false; }
 function disableScroll() { document.body.addEventListener('wheel', preventScroll, { passive: false }); }
 function enableScroll() { document.body.removeEventListener('wheel', preventScroll, { passive: false }); }
@@ -95,19 +113,6 @@ $filterDialog.addEventListener('click', (e) => {
   }
 });
 
-$filterButton.addEventListener('click', () => {
-  const username = $filterByUsernameInput.value;
-  filterStates.username = username;
-
-  console.log(filterStates);
-  const filteredPosts = filterSearch(POSTS, filterStates);
-  console.log(filteredPosts);
-
-  filterStates.reset();
-  modalState.open = false;
-  $filterDialog.close();
-});
-
 $filterByCategoriesInput.addEventListener('keydown', (e) => {
   const { categories } = filterStates;
   const { value } = $filterByCategoriesInput;
@@ -117,13 +122,21 @@ $filterByCategoriesInput.addEventListener('keydown', (e) => {
     $filterByCategoriesInput.value = '';
     console.log(filterStates);
   }
-})
+});
 
-// CURRENTLY ONLY FILTERS BY CATEGORIES ADD FILTER BY USERNAME
-function filterSearch(posts, { username, categories }) {
-  const data = posts.filter(({ categorys }) => categories.every(categoryID => categorys.includes(categoryID)));
-  return data;
-}
+$filterButton.addEventListener('click', () => {
+  const username = $filterByUsernameInput.value;
+  filterStates.username = username;
+
+  console.log(filterStates);
+  const filteredPosts = filterSearch(POSTS, filterStates);
+  // after getting the filtered data update 
+  console.log(filteredPosts);
+
+  filterStates.reset();
+  modalState.open = false;
+  $filterDialog.close();
+});
 
 function renderPosts({ title, contents, date, memberIndex, categorys }) {
   const { name } = getUser(Number(memberIndex));
@@ -165,6 +178,4 @@ function showPostDetailModal(title, contents, date, username, categorys) {
     </div>
   `;
 }
-
-
 
